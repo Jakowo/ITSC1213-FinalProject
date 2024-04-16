@@ -17,16 +17,19 @@ public class Colony {
     
     public void buildSolarPanel() {
         SolarPanel solarPanel = new SolarPanel(resourceManager);
+        checkMoney(solarPanel.getCost()); // Check if there is enough money to build the generator
         generatorManager.addGenerator(solarPanel);
     }
 
     public void buildFarm() {
         Farm farm = new Farm(resourceManager);
+        checkMoney(farm.getCost()); // Check if there is enough money to build the generator
         generatorManager.addGenerator(farm);
     }
 
     public void buildCarbonFilter() {
         CarbonFilter carbonFilter = new CarbonFilter(resourceManager);
+        checkMoney(carbonFilter.getCost()); // Check if there is enough money to build the generator
         generatorManager.addGenerator(carbonFilter);
     }
 
@@ -54,6 +57,14 @@ public class Colony {
             System.out.println(name + " has run out of resources! Game over.");
             System.exit(0);
         }
+    }
+
+    private boolean checkMoney(int cost) {
+        if (resourceManager.getMoney() < cost) {
+            System.out.println("Not enough money to build this generator.");
+            return false;
+        }
+        return true;
     }
 
     public String toString() {

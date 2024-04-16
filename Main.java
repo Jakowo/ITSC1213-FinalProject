@@ -7,7 +7,6 @@ import java.util.Scanner;
 // TODO: Figure out if there's a way to make mainMenu() and generatorMenu() not require a save object
 // TODO: Add comments to all classes and methods
 
-
 public class Main {
 
     public static void main(String[] args) {
@@ -24,7 +23,7 @@ public class Main {
             String choice = scanner.nextLine();
 
             if (choice.contains("y")) {
-                save.loadGame(colony, resourceManager, generatorManager);
+                save.loadGameRework(colony);
                 System.out.println("Game loaded successfully.");
                 mainMenu(scanner, colony, save);
             } else {
@@ -89,7 +88,7 @@ public class Main {
                     colony.update();
                     break;
                 case 4:
-                    save.saveGame(colony, colony.resourceManager, colony.generatorManager);
+                    save.saveGameRework(colony);
                     scanner.close();
                     System.exit(0);
                     break;

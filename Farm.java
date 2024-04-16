@@ -10,6 +10,7 @@ public class Farm extends Generator {
     @Override
     public void generate() {
         resourceManager.addFood(production);
+        usage(resourceManager);
     }
 
     @Override

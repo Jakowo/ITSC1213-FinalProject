@@ -6,6 +6,78 @@ import java.io.IOException;
 
 public class Save {
     
+    public void saveGameRework(Colony colony) {
+
+        try {
+            FileWriter fileWriter = new FileWriter("save.txt");
+            BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+
+            String line = "";
+            line += colony.getName() + ",";
+            line += colony.resourceManager.getMoney() + ",";
+            line += colony.resourceManager.getEnergy() + ",";
+            line += colony.resourceManager.getFood() + ",";
+            line += colony.resourceManager.getOxygen() + ",";
+
+            for (Generator generator : colony.generatorManager.getGenerators()) {
+                line += generator.getClass().getName() + ",";
+            }
+
+            line = line.substring(0, line.length() - 1); // Remove the last comma.
+            bufferedWriter.write(line);
+
+            bufferedWriter.close();
+            fileWriter.close();
+        } catch (IOException e) {
+            System.out.println("Error saving game.");
+        }
+    }
+
+    public void loadGameRework(Colony colony) {
+
+        try {
+            FileReader fileReader = new FileReader("save.txt");
+            BufferedReader bufferedReader = new BufferedReader(fileReader);
+
+            String line = bufferedReader.readLine();
+            String data[] = line.split(",");
+
+            String name = data[0];
+            int money = Integer.parseInt(data[1]);
+            int energy = Integer.parseInt(data[2]);
+            int food = Integer.parseInt(data[3]);
+            int oxygen = Integer.parseInt(data[4]);
+
+            colony = new Colony(name, colony.resourceManager, colony.generatorManager);
+
+            for (int i = 5; i < data.length; i++) {
+                switch (data[i]) {
+                    case "Farm":
+                        colony.buildFarm();
+                        break;
+                    case "SolarPanel":
+                        colony.buildSolarPanel();
+                        break;
+                    case "CarbonFilter":
+                        colony.buildCarbonFilter();
+                        break;
+                }
+            }
+
+            colony.resourceManager.setMoney(money);
+            colony.resourceManager.setEnergy(energy);
+            colony.resourceManager.setFood(food);
+            colony.resourceManager.setOxygen(oxygen);
+
+            bufferedReader.close();
+            fileReader.close();
+
+        } catch (IOException e) {
+            System.out.println("Error loading game.");
+        }
+
+    }
+
     // This is going to write the save data into a text file, so that the user can load it later.
     public void saveGame(Colony colony, ResourceManager resourceManager, GeneratorManager generatorManager) {
         try {

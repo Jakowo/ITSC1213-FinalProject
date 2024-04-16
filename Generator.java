@@ -34,6 +34,12 @@ public abstract class Generator {
         return production;
     }
 
+    public void usage(ResourceManager resourceManager) {
+        resourceManager.subtractEnergy(energyUsage);
+        resourceManager.subtractFood(foodUsage);
+        resourceManager.subtractOxygen(oxygenUsage);
+    }
+
     public abstract void generate();
 
     public abstract String toString();
