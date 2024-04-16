@@ -3,13 +3,16 @@ public class SolarPanel extends Generator {
     ResourceManager resourceManager;
 
     public SolarPanel(ResourceManager resourceManager) {
-        super(100, 5, 0, 0, 10);
+        super(100, 5, 0, 5, 10);
         this.resourceManager = resourceManager;
     }
 
     @Override
     public void generate() {
         resourceManager.addEnergy(production);
+        resourceManager.subtractEnergy(energyUsage);
+        resourceManager.subtractFood(foodUsage);
+        resourceManager.subtractOxygen(oxygenUsage);
     }
 
     @Override

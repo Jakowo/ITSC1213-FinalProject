@@ -3,13 +3,16 @@ public class Farm extends Generator {
     ResourceManager resourceManager;
 
     public Farm(ResourceManager resourceManager) {
-        super(100, 5, 5, 5, 10);
+        super(100, 5, 2, 3, 7);
         this.resourceManager = resourceManager;
     }
 
     @Override
     public void generate() {
         resourceManager.addFood(production);
+        resourceManager.subtractEnergy(energyUsage);
+        resourceManager.subtractFood(foodUsage);
+        resourceManager.subtractOxygen(oxygenUsage);
     }
 
     @Override

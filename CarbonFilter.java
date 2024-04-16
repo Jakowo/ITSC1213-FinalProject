@@ -9,7 +9,10 @@ public class CarbonFilter extends Generator {
 
     @Override
     public void generate() {
-       resourceManager.addOxygen(production);
+        resourceManager.addOxygen(production);
+        resourceManager.subtractEnergy(energyUsage);
+        resourceManager.subtractFood(foodUsage);
+        resourceManager.subtractOxygen(oxygenUsage);
     }
 
     @Override
