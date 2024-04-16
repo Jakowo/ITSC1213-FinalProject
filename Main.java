@@ -1,6 +1,13 @@
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
+// TODO: Overhaul save system to have multiple saves
+// TODO: Format main menu to be more user-friendly
+// TODO: Optimize main menu to be more efficient
+// TODO: Figure out if there's a way to make mainMenu() and generatorMenu() not require a save object
+// TODO: Add comments to all classes and methods
+
+
 public class Main {
 
     public static void main(String[] args) {
@@ -26,9 +33,7 @@ public class Main {
         } else {
             newGame(scanner, colony, resourceManager, generatorManager);
         }
-
         mainMenu(scanner, colony, save);
-
     }
     
     static void newGame(Scanner scanner, Colony colony, ResourceManager resourceManager, GeneratorManager generatorManager) {
@@ -85,6 +90,7 @@ public class Main {
                     break;
                 case 4:
                     save.saveGame(colony, colony.resourceManager, colony.generatorManager);
+                    scanner.close();
                     System.exit(0);
                     break;
                 default:
@@ -101,16 +107,15 @@ public class Main {
 
         do {
             try {
-                System.out.println("Which generator would you like to build?");
-                System.out.println("1. Farm");
-                System.out.println("2. Solar Panel");
-                System.out.println("3. Carbon Filter");
-                System.out.println("4. Go back");
+                System.out.println("\nWhich generator would you like to build?");
+                System.out.println("\t1. Farm");
+                System.out.println("\t2. Solar Panel");
+                System.out.println("\t3. Carbon Filter");
+                System.out.println("\t4. Go back");
                 System.out.print("Enter your choice: ");
                 choice = scanner.nextInt();
 
                 if (choice < 1 || choice > 4) {
-                    System.out.println("Invalid choice. Please try again.");
                     throw new IllegalArgumentException();
                 }
 
