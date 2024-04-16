@@ -10,6 +10,10 @@ public class GeneratorManager {
         this.resourceManager = resourceManager;
     }
 
+    public ArrayList<Generator> getGenerators() {
+        return generators;
+    }
+
     public void addGenerator(Generator generator) {
         generators.add(generator);
         resourceManager.subtractMoney(generator.getCost());

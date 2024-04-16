@@ -10,32 +10,23 @@ public class Colony {
         this.resourceManager = resourceManager;
         this.generatorManager = generatorManager;
     }
+
+    public String getName() {
+        return name;
+    }
     
     public void buildSolarPanel() {
         SolarPanel solarPanel = new SolarPanel(resourceManager);
-        if (resourceManager.getMoney() < solarPanel.getCost()) {
-            System.out.println("Not enough money to build a solar panel.");
-            return;
-        }
-
         generatorManager.addGenerator(solarPanel);
     }
 
     public void buildFarm() {
         Farm farm = new Farm(resourceManager);
-        if (resourceManager.getMoney() < farm.getCost()) {
-            System.out.println("Not enough money to build a farm.");
-            return;
-        }
         generatorManager.addGenerator(farm);
     }
 
     public void buildCarbonFilter() {
         CarbonFilter carbonFilter = new CarbonFilter(resourceManager);
-        if (resourceManager.getMoney() < carbonFilter.getCost()) {
-            System.out.println("Not enough money to build a carbon filter.");
-            return;
-        }
         generatorManager.addGenerator(carbonFilter);
     }
 
