@@ -11,36 +11,37 @@ public class Main {
 
     public static void main(String[] args) {
         
-        Save save = new Save();
+        Scanner scanner = new Scanner(System.in);
         ResourceManager resourceManager = new ResourceManager();
         GeneratorManager generatorManager = new GeneratorManager(resourceManager);
-        Colony colony = new Colony("Default", resourceManager, generatorManager);
-        Scanner scanner = new Scanner(System.in);
+        Save save = new Save();
 
         if (save.saveExists()) {
             System.out.println("A save file has been detected. Would you like to load it?");
             System.out.print("Enter 'yes' or 'no': ");
-            String choice = scanner.nextLine();
 
-            if (choice.contains("y")) {
-                save.loadGameRework(colony);
-                System.out.println("Game loaded successfully.");
+            String choice = scanner.nextLine();
+            if (choice.contains(("y"))) {
+                Colony colony = save.loadGameRework(resourceManager, generatorManager);
+                if (colony == null) {
+                    System.out.println("Error loading save file. Starting new game.");
+                    newGame(scanner, resourceManager, generatorManager);
+                }
+
                 mainMenu(scanner, colony, save);
             } else {
-                newGame(scanner, colony, resourceManager, generatorManager);
+                Colony colony = newGame(scanner, resourceManager, generatorManager);
+                mainMenu(scanner, colony, save);
             }
-        } else {
-            newGame(scanner, colony, resourceManager, generatorManager);
         }
-        mainMenu(scanner, colony, save);
     }
     
-    static void newGame(Scanner scanner, Colony colony, ResourceManager resourceManager, GeneratorManager generatorManager) {
+    static Colony newGame(Scanner scanner, ResourceManager resourceManager, GeneratorManager generatorManager) {
         System.out.println("Welcome to Space Colony Sim! This is my final project for ITSC1213. To get started, why don't we name your colony?");
         System.out.print("Enter the name of your colony: ");
         String name = scanner.nextLine();
 
-        colony = new Colony(name, resourceManager, generatorManager);
+        Colony colony = new Colony(name, resourceManager, generatorManager);
 
         System.out.println("Great! Your colony has been created. Here are your starting resources:");
         System.out.println(colony.toString());
@@ -49,6 +50,8 @@ public class Main {
         System.out.println("1. Farm: Generates food. Cost: $150, Energy Usage: 5, Food Usage: 2, Oxygen Usage: 5, Production: 10");
         System.out.println("2. Solar Panel: Generates energy. Cost: $200, Energy Usage: 0, Food Usage: 0, Oxygen Usage: 5, Production: 5");
         System.out.println("3. Carbon Filter: Generates oxygen. Cost: $250, Energy Usage: 5, Food Usage: 5, Oxygen Usage: 5, Production: 10");
+
+        return colony;
     }
 
     static void mainMenu(Scanner scanner, Colony colony, Save save) {
@@ -66,7 +69,6 @@ public class Main {
                 choice = scanner.nextInt();
 
                 if (choice < 1 || choice > 4) {
-                    System.out.println("Invalid choice. Please try again.");
                     throw new IllegalArgumentException();
                 }
 

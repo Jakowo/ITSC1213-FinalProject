@@ -17,20 +17,23 @@ public class Colony {
     
     public void buildSolarPanel() {
         SolarPanel solarPanel = new SolarPanel(resourceManager);
-        checkMoney(solarPanel.getCost()); // Check if there is enough money to build the generator
-        generatorManager.addGenerator(solarPanel);
+        if (checkMoney(solarPanel.getCost())) {
+            generatorManager.addGenerator(solarPanel);
+        } // Check if there is enough money to build the generator
     }
 
     public void buildFarm() {
         Farm farm = new Farm(resourceManager);
-        checkMoney(farm.getCost()); // Check if there is enough money to build the generator
-        generatorManager.addGenerator(farm);
+        if (checkMoney(farm.getCost())) {
+            generatorManager.addGenerator(farm);
+        } // Check if there is enough money to build the generator
     }
 
     public void buildCarbonFilter() {
         CarbonFilter carbonFilter = new CarbonFilter(resourceManager);
-        checkMoney(carbonFilter.getCost()); // Check if there is enough money to build the generator
-        generatorManager.addGenerator(carbonFilter);
+        if (checkMoney(carbonFilter.getCost())) {
+            generatorManager.addGenerator(carbonFilter);
+        } // Check if there is enough money to build the generator
     }
 
     public void update() {
@@ -68,7 +71,7 @@ public class Colony {
     }
 
     public String toString() {
-        return generatorManager.toString() + resourceManager.toString();
+        return name + "\n" + generatorManager.toString() + resourceManager.toString();
     }
 
 }

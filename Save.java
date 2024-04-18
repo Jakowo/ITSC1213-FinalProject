@@ -33,7 +33,7 @@ public class Save {
         }
     }
 
-    public void loadGameRework(Colony colony) {
+    public Colony loadGameRework(ResourceManager resourceManager, GeneratorManager generatorManager) {
 
         try {
             FileReader fileReader = new FileReader("save.txt");
@@ -48,7 +48,7 @@ public class Save {
             int food = Integer.parseInt(data[3]);
             int oxygen = Integer.parseInt(data[4]);
 
-            colony = new Colony(name, colony.resourceManager, colony.generatorManager);
+            Colony colony = new Colony(name, resourceManager, generatorManager);
 
             for (int i = 5; i < data.length; i++) {
                 switch (data[i]) {
@@ -64,18 +64,22 @@ public class Save {
                 }
             }
 
-            colony.resourceManager.setMoney(money);
-            colony.resourceManager.setEnergy(energy);
-            colony.resourceManager.setFood(food);
-            colony.resourceManager.setOxygen(oxygen);
+            resourceManager.setMoney(money);
+            resourceManager.setEnergy(energy);
+            resourceManager.setFood(food);
+            resourceManager.setOxygen(oxygen);
 
             bufferedReader.close();
             fileReader.close();
-
+            
+            return colony;
         } catch (IOException e) {
             System.out.println("Error loading game.");
+        } catch (NumberFormatException e) {
+            System.out.println("Error parsing data.");
         }
 
+        return null;
     }
 
     // This is going to write the save data into a text file, so that the user can load it later.
