@@ -9,8 +9,8 @@ public class Farm extends Generator {
 
     @Override
     public void generate() {
-        resourceManager.addFood(production);
-        usage(resourceManager);
+        resourceManager.addFood(production); // Add the production amount to the food resource
+        usage(resourceManager); // Use the generator (super function from abstract class Generator)
     }
 
     @Override

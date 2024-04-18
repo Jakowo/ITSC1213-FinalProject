@@ -11,21 +11,21 @@ public class GeneratorManager {
     }
 
     public ArrayList<Generator> getGenerators() {
-        return generators;
+        return generators; // Return the list of generators
     }
 
     public void addGenerator(Generator generator) {
-        generators.add(generator);
-        resourceManager.subtractMoney(generator.getCost());
+        generators.add(generator); // Add a generator to the list
+        resourceManager.subtractMoney(generator.getCost()); // Subtract the cost of the generator from the money resource
     }
 
     public void removeGenerator(Generator generator) {
-        generators.remove(generator);
+        generators.remove(generator); // Remove a generator from the list
     }
 
     public void generate() {
         for (Generator generator : generators) {
-            generator.generate();
+            generator.generate(); // Generate resources
         }
     }
 

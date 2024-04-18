@@ -8,13 +8,13 @@ public class CarbonFilter extends Generator {
     }
 
     @Override
-    public void generate() {
-        resourceManager.addOxygen(production);
-        usage(resourceManager);
+    public void generate() { 
+        resourceManager.addOxygen(production); // Add the production amount to the oxygen resource
+        usage(resourceManager); // Use the generator (super function from abstract class Generator)
     }
 
     @Override
-    public String toString() {
+    public String toString() { // Return the string representation of the object
         return "{Carbon Filter: cost=" + cost + ", energyUsage=" + energyUsage + ", foodUsage=" + foodUsage + ", oxygenUsage=" + oxygenUsage + ", production=" + production + "}";
     }
     

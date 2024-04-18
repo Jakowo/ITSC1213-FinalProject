@@ -76,14 +76,14 @@ public class ResourceManager {
         this.energy -= energy;
     }
 
-    public void turnUpdate() {
+    public void turnUpdate() { // Adds a set income, and takes away a set amount of resources every turn
         addMoney(50);
         subtractOxygen(5);
         subtractFood(5);
         subtractEnergy(5);
     }
 
-    public void printResources() {
+    public void printResources() { // Prints the resources to the console
         System.out.println("Money: " + money);
         System.out.println("Oxygen: " + oxygen);
         System.out.println("Food: " + food);

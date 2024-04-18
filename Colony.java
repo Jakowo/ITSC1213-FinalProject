@@ -16,30 +16,30 @@ public class Colony {
     }
     
     public void buildSolarPanel() {
-        SolarPanel solarPanel = new SolarPanel(resourceManager);
-        if (checkMoney(solarPanel.getCost())) {
-            generatorManager.addGenerator(solarPanel);
-        } // Check if there is enough money to build the generator
+        SolarPanel solarPanel = new SolarPanel(resourceManager); // Create a new solar panel
+        if (checkMoney(solarPanel.getCost())) { // Check if there is enough money to build the generator
+            generatorManager.addGenerator(solarPanel); // Add the generator to the generator manager
+        } 
     }
 
     public void buildFarm() {
         Farm farm = new Farm(resourceManager);
         if (checkMoney(farm.getCost())) {
             generatorManager.addGenerator(farm);
-        } // Check if there is enough money to build the generator
+        } 
     }
 
     public void buildCarbonFilter() {
         CarbonFilter carbonFilter = new CarbonFilter(resourceManager);
         if (checkMoney(carbonFilter.getCost())) {
             generatorManager.addGenerator(carbonFilter);
-        } // Check if there is enough money to build the generator
+        } 
     }
 
     public void update() {
-        generatorManager.generate();
-        checkStatus();
-        resourceManager.turnUpdate();
+        generatorManager.generate(); // Generate resources
+        checkStatus(); // Check the status of the colony (if resources are low or negative)
+        resourceManager.turnUpdate(); // Update the resources
     }
     
     private void checkStatus() {    

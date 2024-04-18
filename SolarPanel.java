@@ -9,8 +9,8 @@ public class SolarPanel extends Generator {
 
     @Override
     public void generate() {
-        resourceManager.addEnergy(production);
-        usage(resourceManager);
+        resourceManager.addEnergy(production); // Add energy to the resource manager
+        usage(resourceManager); // Use resources
     }
 
     @Override

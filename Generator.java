@@ -14,7 +14,7 @@ public abstract class Generator {
         this.production = production;
     }
 
-    public int getCost() {
+    public int getCost() { 
         return cost;
     }
 
@@ -34,7 +34,7 @@ public abstract class Generator {
         return production;
     }
 
-    public void usage(ResourceManager resourceManager) {
+    public void usage(ResourceManager resourceManager) { // Subtract the usage from the resources (usage amount is defined in the constructor of the generator)
         resourceManager.subtractEnergy(energyUsage);
         resourceManager.subtractFood(foodUsage);
         resourceManager.subtractOxygen(oxygenUsage);

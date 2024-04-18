@@ -5,26 +5,45 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 public class Save {
-    
-    public void saveGameRework(Colony colony) {
+
+    public void saveGame(Colony colony) {
 
         try {
-            FileWriter fileWriter = new FileWriter("save.txt");
+
+            FileWriter fileWriter = new FileWriter("save.txt", true);
             BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
 
-            String line = "";
-            line += colony.getName() + ",";
-            line += colony.resourceManager.getMoney() + ",";
-            line += colony.resourceManager.getEnergy() + ",";
-            line += colony.resourceManager.getFood() + ",";
-            line += colony.resourceManager.getOxygen() + ",";
+            // Find the next empty line in the file, and write the data there.
 
-            for (Generator generator : colony.generatorManager.getGenerators()) {
-                line += generator.getClass().getName() + ",";
+            int id = nextSaveSlot(); // Find the next empty line in the file
+            
+            switch(id) {
+                case -1: // Error finding next save slot
+                    System.out.println("Error saving game.");
+                    bufferedWriter.close();
+                    fileWriter.close();
+                    return;
+                case 0: // File is empty
+                    break;
+                default: // Else
+                    bufferedWriter.newLine();
+                    break;
+            }
+
+            String line = "";
+            line += id + ","; // Save slot
+            line += colony.getName() + ","; // Colony name
+            line += colony.resourceManager.getMoney() + ","; // Money
+            line += colony.resourceManager.getEnergy() + ","; // Energy
+            line += colony.resourceManager.getFood() + ","; // Food
+            line += colony.resourceManager.getOxygen() + ","; // Oxygen
+
+            for (Generator generator : colony.generatorManager.getGenerators()) { // Loop through the generators
+                line += generator.getClass().getName() + ","; // Add the generator to the save data
             }
 
             line = line.substring(0, line.length() - 1); // Remove the last comma.
-            bufferedWriter.write(line);
+            bufferedWriter.write(line); // Write the line to the file
 
             bufferedWriter.close();
             fileWriter.close();
@@ -33,38 +52,43 @@ public class Save {
         }
     }
 
-    public Colony loadGameRework(ResourceManager resourceManager, GeneratorManager generatorManager) {
+    public Colony loadGame(ResourceManager resourceManager, GeneratorManager generatorManager, int saveSlot) {
 
         try {
             FileReader fileReader = new FileReader("save.txt");
             BufferedReader bufferedReader = new BufferedReader(fileReader);
 
-            String line = bufferedReader.readLine();
-            String data[] = line.split(",");
+            for (int i = 0; i < saveSlot; i++) {
+                bufferedReader.readLine(); // Skip to the save slot
+            }
 
-            String name = data[0];
-            int money = Integer.parseInt(data[1]);
-            int energy = Integer.parseInt(data[2]);
-            int food = Integer.parseInt(data[3]);
-            int oxygen = Integer.parseInt(data[4]);
+            String line = bufferedReader.readLine(); 
+            String data[] = line.split(","); // Split the line into an array
 
-            Colony colony = new Colony(name, resourceManager, generatorManager);
+            String name = data[1]; // Get the colony name
+            int money = Integer.parseInt(data[2]); // Get the money
+            int energy = Integer.parseInt(data[3]); // Get the energy
+            int food = Integer.parseInt(data[4]); // Get the food
+            int oxygen = Integer.parseInt(data[5]); // Get the oxygen
 
-            for (int i = 5; i < data.length; i++) {
+            Colony colony = new Colony(name, resourceManager, generatorManager); // Create a new colony object
+
+            for (int i = 6; i < data.length; i++) { // Loop through the generators
                 switch (data[i]) {
                     case "Farm":
-                        colony.buildFarm();
+                        colony.buildFarm(); // If the generator is a farm, build a farm
                         break;
                     case "SolarPanel":
-                        colony.buildSolarPanel();
+                        colony.buildSolarPanel(); // If the generator is a solar panel, build a solar panel
                         break;
                     case "CarbonFilter":
-                        colony.buildCarbonFilter();
+                        colony.buildCarbonFilter(); // If the generator is a carbon filter, build a carbon filter
                         break;
                 }
             }
 
-            resourceManager.setMoney(money);
+            // Set the resources to the values loaded from the file
+            resourceManager.setMoney(money); 
             resourceManager.setEnergy(energy);
             resourceManager.setFood(food);
             resourceManager.setOxygen(oxygen);
@@ -83,87 +107,63 @@ public class Save {
     }
 
     // This is going to write the save data into a text file, so that the user can load it later.
-    public void saveGame(Colony colony, ResourceManager resourceManager, GeneratorManager generatorManager) {
-        try {
-            FileWriter fileWriter = new FileWriter("save.txt");
-            BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
-
-            bufferedWriter.write(colony.getName()); // This is the name of the colony.
-            bufferedWriter.newLine();
-            bufferedWriter.write(resourceManager.getMoney() + "");
-            bufferedWriter.newLine();
-            bufferedWriter.write(resourceManager.getEnergy() + "");
-            bufferedWriter.newLine();
-            bufferedWriter.write(resourceManager.getFood() + "");
-            bufferedWriter.newLine();
-            bufferedWriter.write(resourceManager.getOxygen() + "");
-            bufferedWriter.newLine();
-            
-            for (Generator generator : generatorManager.getGenerators()) {
-                bufferedWriter.write(generator.getClass().getName());
-                bufferedWriter.newLine();
-            }
-            
-            bufferedWriter.close();
-            fileWriter.close();
-        } catch (IOException e) {
-            System.out.println("Error saving game.");
-        }
-    }
-
-    // This is going to load the save data from the text file.
-    public void loadGame(Colony colony, ResourceManager resourceManager, GeneratorManager generatorManager) {
-        try {
-            FileReader fileReader = new FileReader("save.txt");
-            BufferedReader bufferedReader = new BufferedReader(fileReader);
-            
-            String name = bufferedReader.readLine();
-            int money = Integer.parseInt(bufferedReader.readLine());
-            int energy = Integer.parseInt(bufferedReader.readLine());
-            int food = Integer.parseInt(bufferedReader.readLine());
-            int oxygen = Integer.parseInt(bufferedReader.readLine());
-            
-            colony = new Colony(name, resourceManager, generatorManager);
-            resourceManager.setMoney(money);
-            resourceManager.setEnergy(energy);
-            resourceManager.setFood(food);
-            resourceManager.setOxygen(oxygen);
-            
-            String line;
-            while ((line = bufferedReader.readLine()) != null) {
-                switch (line) {
-                    case "Farm":
-                        colony.buildFarm();
-                        break;
-                    case "SolarPanel":
-                        colony.buildSolarPanel();
-                        break;
-                    case "CarbonFilter":
-                        colony.buildCarbonFilter();
-                        break;
-                }
-            }
-
-            bufferedReader.close();
-            fileReader.close();
-        } catch (IOException e) {
-            System.out.println("Error loading game.");
-        }
-    }
 
     public boolean saveExists() {
         try {
-            FileReader fileReader = new FileReader("save.txt");
+            FileReader fileReader = new FileReader("save.txt"); // If a save file exists, the file reader will be able to read it.
+            if (fileReader.read() == -1) { // If the file is empty, return false.
+                fileReader.close();
+                return false;
+            }
             fileReader.close();
-            return true;
+            return true; // If the file is not empty, return true.
         } catch (IOException e) {
             return false;
         }
     }
 
+    public void listSaves() {
+        try {
+            FileReader fileReader = new FileReader("save.txt");
+            BufferedReader bufferedReader = new BufferedReader(fileReader);
+
+            String line;
+            while ((line = bufferedReader.readLine()) != null) { // Loop through the file
+                System.out.println(line); // Print each line in the file
+            }
+
+            bufferedReader.close();
+            fileReader.close();
+        } catch (IOException e) {
+            System.out.println("Error listing saves.");
+        }
+    }
+
+    public int nextSaveSlot() {
+        try {
+
+            BufferedReader bufferedReader = new BufferedReader(new FileReader("save.txt"));
+
+            int count = 0;
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                count++;
+                if (line.equals("")) {
+                    break; // If the line is empty, return the count
+                }
+            } 
+
+            bufferedReader.close();
+            return count + 1; // Return the count + 1 (the next save slot)
+        } catch (IOException e) {
+            System.out.println("Error finding next save slot.");
+        }
+        return -1; // Return -1 if there is an error
+    }
+
     public void deleteSave() {
         try {
-            FileWriter fileWriter = new FileWriter("save.txt");
+            FileWriter fileWriter = new FileWriter("save.txt"); // Overwrite the save file
             fileWriter.close();
         } catch (IOException e) {
             System.out.println("Error deleting save.");
